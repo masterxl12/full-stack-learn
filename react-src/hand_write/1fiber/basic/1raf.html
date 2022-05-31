@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>raf</title>
+  </head>
+  <body>
+    <div id="progressbar" style="width: 0; background: lightblue; height: 20px"></div>
+    <button id="btn">点击</button>
+    <script>
+      let oDiv = document.getElementById('progressbar')
+      let btn = document.getElementById('btn')
+      let start = Date.now()
+      function progress() {
+        oDiv.style.width = oDiv.offsetWidth + 1 + 'px'
+        oDiv.innerHTML = oDiv.offsetWidth + '%'
+        if (oDiv.offsetWidth < 100) {
+          let current = Date.now()
+          console.log(current - start)
+          start = current
+          requestAnimationFrame(progress)
+        }
+      }
+      btn.addEventListener('click', () => {
+        oDiv.style.width = 0
+        requestAnimationFrame(progress)
+      })
+    </script>
+  </body>
+</html>
