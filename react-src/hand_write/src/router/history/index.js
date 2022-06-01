@@ -1,2 +1,2 @@
-export { default as createBrowserHistory } from 'history/createBrowserHistory';
-export { default as createHashHistory } from 'history/createHashHistory';
+export { default as createBrowserHistory } from './createBrowserHistory';
+export { default as createHashHistory } from './createHashHistory';
