@@ -1,9 +1,5 @@
 module.exports = {
-  parser: 'babel-eslint',
-  extends: [
-    'plugin:react/recommended',
-    'airbnb',
-  ],
+  "parser": "babel-eslint",
   settings: {
     'import/resolver': {
       alias: [['@', 'src']],
