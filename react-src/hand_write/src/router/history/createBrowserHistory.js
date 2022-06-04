@@ -2,6 +2,7 @@ function createBrowserHistory() {
   const globalHistory = window.history;
   let listeners = []; //存放所有的监听函数
   let state;
+  let prompt;
 
   function listen(listener) {
     listeners.push(listener);
@@ -49,6 +50,14 @@ function createBrowserHistory() {
     } else {
       state = nextState; //TODO
     }
+    if (prompt) {
+      let message = prompt({
+        pathname, state
+      });
+      let result = window.confirm(message)
+      if (!result) return null
+    }
+
     globalHistory.pushState(state, null, pathname); //我们已经 跳转路径
     let location = { state, pathname };
     setState({ action, location });
@@ -65,6 +74,10 @@ function createBrowserHistory() {
       pathname: window.location.pathname,
       state: globalHistory.state,
     },
+    block(message) {
+      prompt = message;
+      return () => prompt = null
+    }
   };
   return history;
 }

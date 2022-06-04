@@ -12,22 +12,27 @@ class Route extends Component {
       <RouterContext.Consumer>
         {(context) => {
           const location = context.location;
-          const { component, computedmatch } = this.props;
+          const { component, computedmatch, render, children } = this.props;
           const match = computedmatch
             ? computedmatch
             : matchPath(location.pathname, this.props);
 
+          const props = { ...context, location, match };
           if (match) {
-            const props = { ...context, location, match };
-            const element = React.createElement(component, props);
-            return (
-              <RouterContext.Provider value={{ props }}>
-                {element}
-              </RouterContext.Provider>
-            );
+            props.match = match;
+            if (children) {
+              return children(props)
+            } else if (component) {
+              return React.createElement(component, props);
+            } else if (render) {
+              return render(props);
+            } else {
+              return null
+            }
+          } else {
+            if (children) return children(props)
+            return null
           }
-
-          return null;
         }}
       </RouterContext.Consumer>
     );
