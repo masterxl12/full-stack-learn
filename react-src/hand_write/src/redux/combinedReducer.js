@@ -19,7 +19,6 @@ export default function combineReducer(reducers) {
 
     const finalReducerKeys = Object.keys(finalReducers);
     return function combination(state = {}, action) {
-        debugger
         let hasChanged = false;
         const nextState = {};
         finalReducerKeys.forEach(key => {
