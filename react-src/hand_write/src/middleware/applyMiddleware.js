@@ -1,4 +1,5 @@
 import { createStore, combinedReducer } from "../redux";
+import compose from './compose';
 
 function logger({ getState, dispatch }) {
     return (next) => { // 调和下一个中间件或是原始的store.dispatch方法
@@ -28,7 +29,7 @@ function reduxThunk({ getState, dispatch }) {// 改造后的dispatch方法
 }
 
 
-function applyMiddleware(middleware) {
+function applyMiddleware(...middleWares) {
     return (createStore) => {
         return (reducer) => {
             const store = createStore(reducer);
@@ -37,7 +38,8 @@ function applyMiddleware(middleware) {
                 getState: store.getState,
                 dispatch: (action) => dispatch?.(action)
             };
-            dispatch = middleware(middlewareAPI)(store.dispatch);
+            let chain = middleWares.map(middleware => middleware(middlewareAPI));
+            dispatch = compose(...chain)(store.dispatch);
             return {
                 ...store,
                 dispatch
