@@ -1,5 +1,6 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const FileListPlugin = require('./plugins/FileListPlugin')
 
 const webpackConfig = {
     // 静态服务器配置
@@ -9,7 +10,7 @@ const webpackConfig = {
         port: 9000,
         open: true,
     },
-    mode: 'production',
+    mode: 'development',
     // 多入口配置
     entry: {
         home: './src/index.js',
@@ -33,6 +34,9 @@ const webpackConfig = {
                 // collapseWhitespace: true
             },
             chunks: ['other'],
+        }),
+        new FileListPlugin({
+            filename: 'fileList.md'
         })
     ],
     // 监控文件变化 并实时打包
@@ -47,6 +51,18 @@ const webpackConfig = {
     module: {
         rules: [
             {
+                test: /\.(jpg|png|jpeg)$/,
+                use: [
+                    // "file-loader",
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 800 * 1024,
+                        }
+                    }
+                ]
+            },
+            {
                 test: /\.js$/,
                 use:
                 {
@@ -56,7 +72,14 @@ const webpackConfig = {
                     }
                 }
             },
+            {
+                test: /\.(less|css|sass)$/,
+                use: ["style-loader", 'css-loader', 'less-loader']
+            }
         ]
+    },
+    resolveLoader: {
+        modules: [path.resolve(__dirname, 'loaders')]
     },
     resolve: {
         modules: [path.resolve(__dirname, 'node_modules')],
