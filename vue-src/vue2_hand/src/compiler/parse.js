@@ -25,7 +25,6 @@ export function parseHTML(html) {
     }
 
     let root;
-    let currentParent;
     let stack = []; // 使用栈来模拟 标签是否符合规则
 
     //  解析开始标签
@@ -34,7 +33,13 @@ export function parseHTML(html) {
         if (!root) { // 如果没有根级元素，则创建
             root = element;
         }
-        currentParent = element; // 将当前解析的标签  保存起来
+        // 将当前解析的标签  保存起来
+        let parent = stack[stack.length - 1];
+        if (parent) {
+            element.parent = parent;
+            parent.children.push(element)
+
+        }
         stack.push(element)   // 将生成的ast 放到栈中
         // console.log(tagName, attrs, '========开始标签======');
     }
@@ -42,19 +47,22 @@ export function parseHTML(html) {
     //  解析结束标签
     function end(tagName) {
         // 在结尾标签处 创建父子关系
-        let element = stack.pop(); // 取出栈中的最后一个
-        let currentParent = stack[stack.length - 1];
-        if (currentParent) { // 在闭合时可以知道这个标签的父亲是谁
-            element.parent = currentParent;
-            currentParent.children.push(element);
-        }
+        // let element =
+        stack.pop(); // 取出栈中的最后一个
+        // let currentParent = stack[stack.length - 1];
+        // if (currentParent) { // 在闭合时可以知道这个标签的父亲是谁
+        //     element.parent = currentParent;
+        //     currentParent.children.push(element);
+        // }
         // console.log(tagName, "---------结束标签-----------");
     }
 
     //  解析标签中的文本内容
     function chars(text) {
         // text = text.replace(/\s/g, '');
+        // 遇到空格就删除掉
         text = text.replace(/(^\s*)|(\s*$)/g, '');
+        let currentParent = stack[stack.length - 1];
         if (text) {
             currentParent.children.push({
                 type: 3,
@@ -98,7 +106,11 @@ export function parseHTML(html) {
         // break;
     }
 
-    function advance(n) { // 将字符串进行截取操作  在更新html内容
+    /**
+     * 将字符串进行截取操作  在更新html内容
+     * @param {*} n 
+     */
+    function advance(n) {
         // console.log(html);
         html = html.substring(n);
         // console.log(html);

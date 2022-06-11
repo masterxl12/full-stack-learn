@@ -5,16 +5,18 @@ import Dep from "./observe/dep";
 
 export function initState(vm) {
     const opts = vm.$options;
-    if (opts.props) {
-        initProps(vm)
-    }
-    if (opts.methods) {
-        initMethods(vm)
-    }
+    // if (opts.props) {
+    //     initProps(vm)
+    // }
+    // if (opts.methods) {
+    //     initMethods(vm)
+    // }
     if (opts.data) {
+        // 数据的初始化
         initData(vm)
     }
     if (opts.computed) {
+        // 计算属性的初始化
         initComputed(vm)
     }
     if (opts.watch) {
@@ -41,7 +43,9 @@ function initData(vm) {
     //  2. 数组 单独处理的
 
     //  3. 当我去vm取属性时，帮我将属性的取值代理到vm._data 上
+    // 循环代理数据
     for (let key in data) {
+        // 实现vm.__data.msg -> vm.msg
         proxy(vm, '_data', key);
     }
     observe(data)
@@ -152,7 +156,7 @@ export function stateMixin(Vue) {
         // 数据应该依赖这个watcher 数据变化后应该让watcher重新执行
         let watcher = new Watcher(this, expOrFn, cb, options);
         if (options && options.immediate) { // 如果是immediate 立刻执行
-            cb.call(vm, watcher.value); // watch.value 为实例化后返回的结果
+            cb.call(this, watcher.value); // watch.value 为实例化后返回的结果
         }
     }
 }

@@ -23,7 +23,7 @@ export function initMixin(Vue) {
         // MVVM 数据变化驱动视图更新，视图变化数据会被影响，不能跳过数据去更新视图。
         // Vue可以直接操作DOM ($ref,更新dom元素)
 
-        //￿￿ 如果当前有el属性说明要渲染模板
+        // ! 如果当前有el属性说明要渲染模板
         if (vm.$options.el) {
             vm.$mount(vm.$options.el);
         }
@@ -36,16 +36,19 @@ export function initMixin(Vue) {
         el = document.querySelector(el);
         vm.$el = el;
         if (!options.render) {
-            //  没有render 将template转化成render方法
+            //  2. 没有render 将template转化成render方法
             let template = options.template;
+            // 3. 没有模板，就采用指定元素对应的模板
             if (!template && el) {
-                template = el.outerHTML; // 带所有的html，包裹元素包含在内
+                // 带所有的html，包裹元素包含在内
+                template = el.outerHTML;
             }
             // 编译原理  将模板编译成render函数
             const render = compileToFunctions(template);
             options.render = render;
         }
         // 渲染时调用的都是这个render方法
+        // 1. 有render方法
 
         // 需要挂载组件
         mountComponent(vm, el);

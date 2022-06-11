@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { arrayMethods } from "./array";
 import { defineProperty } from '../util';
 import Dep from './dep'
@@ -7,12 +8,12 @@ class Observer {
         // 判断一个对象是否被观测过 看他有没有 __ob__ 属性
         //  每个数据都增加一个观测的实例 '__ob__'
         this.dep = new Dep(); // value = [] value= {}
-        defineProperty(value, '__ob__', this);
-        // Object.defineProperty(value, '__ob__', {
-        //     enumerable: false, // 不能被枚举
-        //     configurable: false,
-        //     value: this
-        // });
+        // defineProperty(value, '__ob__', this);
+        Object.defineProperty(value, '__ob__', {
+            enumerable: false, // 不能被枚举
+            configurable: false,
+            value: this
+        });
 
         if (Array.isArray(value)) {
             // 1. 希望调用push shift unshift splice sort reverse pop
@@ -20,7 +21,7 @@ class Observer {
             value.__proto__ = arrayMethods;
             // 2. 观测数组中对象类型，对象变化也需要做到响应式
             this.observeArray(value);
-            // 3. 对于数组添加元素的方法(push,unshift,splice(x,0,xx)),需要考虑增加元素也是对象的情况
+            // 3. 对于数组添加元素的方法(push,unshift,splice(x,0,xx)),需要考虑增加元素也是对象做拦截
         } else {
             // 使用defineProperty 重新定义属性
             this.walk(value)
@@ -44,10 +45,17 @@ class Observer {
     }
 }
 
+/**
+ * 定义响应式
+ * @param {*} data 
+ * @param {*} key 
+ * @param {*} value 
+ */
 function defineReactive(data, key, value) {
     let childDep = observe(value); // 可能是数组也可能是对象
-    //  默认弄个数据会递归去调用defineProperty 进行拦截 性能差 -> proxy(vue3)
-    //  observe(value); // 递归调用 如果是多层级对象继续遍历 -> 变成响应式
+    //  1.默认弄个数据会递归去调用defineProperty 进行拦截 性能差 -> proxy(vue3)
+    //  2.不存在属性，不能实现defineProperty
+    //  3.observe(value); // 递归调用 如果是多层级对象继续遍历 -> 变成响应式
     let dep = new Dep();  // 每个属性都对应一dep
     // 当页面取值时 说明这个值用来渲染  将这个watcher和这个属性对应起来
     Object.defineProperty(data, key, {
@@ -65,7 +73,8 @@ function defineReactive(data, key, value) {
         set(newValue) {
             // console.log("设置值...");
             if (value === newValue) return;
-            observe(newValue); // 如果用户将值改为对象继续监控
+            // 如果设置的值为对象 继续监控
+            observe(newValue);
             value = newValue;
             dep.notify();   // 依赖更新
             // return newValue;

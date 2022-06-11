@@ -1,3 +1,10 @@
+// @ts-nocheck
+/**
+ * 对数据做一层代理 vm.__data.msg -> vm.msg
+ * @param {*} target 
+ * @param {*} data 
+ * @param {*} key 
+ */
 let proxy = function (target, data, key) { // vm._data.key
     Object.defineProperty(target, key, { // vm.key
         get() {
