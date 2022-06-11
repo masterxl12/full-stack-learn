@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app" style="color:red">
+    <div>
+        <p>{{arr}} {{a}}</p>
+        <li>{{version}}</li>
+    </div>
+</div>
+
+<script src="../../../vueSrc/source_code/vue2.6.12/dist/vue.js"></script>
+<script>
+    let vm = new Vue(
+        {
+            el: '#app',
+            data() {
+                return {
+                    arr: [1, 2, 3],
+                    a: 'hello',
+                    version: 'demo01'
+                }
+            },
+            watch: {
+                a: {
+                    handler(newVal, oldVal) {
+                        console.log(newVal, oldVal);
+                    },
+                    immediate: true
+                }
+            }
+        }
+    );
+    setTimeout(() => {
+        vm.a = 'world';
+    }, 2000);
+    console.log(vm);
+</script>
+</body>
+</html>

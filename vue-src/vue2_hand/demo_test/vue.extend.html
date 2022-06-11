@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>extend</title>
+</head>
+<body>
+<div id="app" style="width: 500px;margin: 0 auto">
+    <textarea v-model="content" style="width: 500px;height: 300px;"></textarea>
+    <button @click="run">运行组件</button>
+</div>
+
+
+<div id="run-result"></div>
+
+<script src="./dist/vue.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                content: '',
+            }
+        },
+        methods: {
+            getSource(type) {
+                const reg = new RegExp(`<${type}[^>]*>`); // ^> 不是 >的
+                let content = this.content;
+                let matches = content.match(reg);
+                if (matches) {
+                    let startIndex = content.indexOf(matches[0]) + matches[0].length;
+                    let endIndex = content.lastIndexOf(`</${type}>`);
+                    return content.slice(startIndex, endIndex);
+                    // console.log();
+                }
+            },
+            run() {
+                let template = this.getSource('template');
+                let script = this.getSource('script').replace(/export default/, 'return');
+                let styleCss = this.getSource('style');
+
+                let obj = new Function(script)();
+                obj.template = template;
+                // console.log(obj);
+                // vue.extend() 原理 拿到用户template 拿到js对象 创建一个子类 手动挂载$mount我们想要挂载的地方
+                let ChildComponent = Vue.extend(obj);
+                let styleEle = document.createElement('style');
+                styleEle.innerHTML = styleCss;
+                document.body.appendChild(styleEle);
+                new ChildComponent().$mount('#run-result');
+            }
+        }
+    })
+</script>
+</body>
+</html>

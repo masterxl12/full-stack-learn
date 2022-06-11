@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>computed</title>
+</head>
+<body>
+<div id="app" style="color:red">
+    <div>
+        <p>123</p>
+        <p>fullName: {{fullName}}</p>
+    </div>
+</div>
+<script src="../dist/vue.js"></script>
+<script>
+    let vm = new Vue(
+        {
+            el: '#app',
+            data() {
+                return {
+                    firstName: '章',
+                    lastName: '三',
+                }
+            },
+            computed: {
+                // 内部也使用了defineProperty, 内部也有一个变量 dirty
+                // computed 还是一个watcher  内部依赖的属性会收集这个watcher
+                fullName() {
+                    console.log("-----");
+                    //  this.firstName, this.lastName 在求值时，会记住当前计算属性的watcher
+                    return this.firstName + this.lastName;
+                }
+            }
+        }
+    );
+    vm.fullName;
+    vm.fullName;
+    setTimeout(() => {
+        vm.firstName = '李';
+        vm.fullName;
+    }, 1000);
+</script>
+</body>
+</html>

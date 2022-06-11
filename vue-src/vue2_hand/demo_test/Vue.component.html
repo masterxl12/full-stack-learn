@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app" style="color:red">
+    {{name}}
+    <my-button></my-button>
+    <my-button></my-button>
+</div>
+
+<script src="../dist/vue.js"></script>
+
+<script>
+    Vue.component('my-button', {
+        template: '<button>点我啊</button>'
+    });
+
+    Vue.component('aa', {
+        template: '<button>点我啊</button>'
+    });
+
+    let vm = new Vue({
+        el: "#app",
+        components: {
+            aa: {
+                template: '<div>hello</div>'
+            },
+            bb: {
+                template: '<div>world</div>'
+            }
+        },
+        data() {
+            return {
+                arr: [1, 2, 3],
+                version: 'vue demo',
+                name: 'zf',
+                school: {
+                    name: 'zs'
+                }
+            }
+        },
+    });
+
+    console.log(vm);
+    //      组件有可能是对象  还有可能是构造函数 组件的属性中多了一个 hook属性 并且包含着组件的初始化方法
+
+</script>
+
+</body>
+</html>

@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FileListPlugin = require('./plugins/FileListPlugin')
+const ZipPlugin = require('./plugins/ZipPlugin')
 
 const webpackConfig = {
     // 静态服务器配置
@@ -37,6 +38,9 @@ const webpackConfig = {
         }),
         new FileListPlugin({
             filename: 'fileList.md'
+        }),
+        new ZipPlugin({
+            filename: 'asset.zip'
         })
     ],
     // 监控文件变化 并实时打包
