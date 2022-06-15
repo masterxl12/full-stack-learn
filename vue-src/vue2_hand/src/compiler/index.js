@@ -1,5 +1,5 @@
-import {parseHTML} from "./parse";
-import {generate} from "./generate";
+import { parseHTML } from "./parse";
+import { generate } from "./generate";
 
 export function compileToFunctions(template) {
     // html 模板 -> render 函数
@@ -7,7 +7,7 @@ export function compileToFunctions(template) {
     // 1. 需要将html代码转化成"ast"语法树 可以用ast语法树来描述语言本身
     let ast = parseHTML(template);
     // console.log("ast: ",ast);
-    // 2. 优化静态节点
+    // 2. 优化静态节点(深度遍历)
 
     // 3. 通过这棵树 重新的生成代码
     let code = generate(ast);

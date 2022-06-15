@@ -30,10 +30,13 @@ class Watcher {
         this.id = id++;             // watcher的唯一标识
         this.deps = [];             // watcher 记录有多少dep依赖他
         this.depsId = new Set();
-        if (typeof exprOrFn === 'function') { // 渲染watcher(走的是更新逻辑)
+        // 1. 渲染watcher(走的是更新逻辑) -> updateComponent
+        if (typeof exprOrFn === 'function') {
             this.getter = exprOrFn;
-        } else {   // 传入的是字符串 用户传入的watcher -> 'a.a.a'(){}
-            this.getter = function () {
+        } else {
+            // 2. 用户watcher
+            // 传入的是字符串 用户传入的watcher -> 'a.a.a'(){}
+            this.getter = () => {
                 // 去当前实例上取值时 才会触发依赖收集
                 let path = exprOrFn.split('.');
                 let obj = vm;
@@ -63,7 +66,8 @@ class Watcher {
         // 依靠js的单线程
         pushTarget(this);   // 当前watcher实例
         let result;
-        if (this.lazy) { // 计算属性值重新赋值（用到data中的值） this -> 应该指向vm实例 而不是watcher
+        if (this.lazy) {
+            // 计算属性值重新赋值（用到data中的值） this -> 应该指向vm实例 而不是watcher
             result = this.getter.call(this.vm);
         } else {
             result = this.getter();
@@ -77,7 +81,8 @@ class Watcher {
         let newValue = this.get(); // 用户修改data中的值 渲染逻辑
         let oldValue = this.value;
         this.value = newValue;  // 更新老值 下次判断比对使用
-        if (this.user) { // 如果是用户传入的watcher
+        // 如果是用户传入的watcher 表明是用户watcher
+        if (this.user) {
             this.cb.call(this, newValue, oldValue);
         }
     }
@@ -100,12 +105,13 @@ class Watcher {
     }
 
     depend() {
+        // stack -> [“渲染watcher”,"计算属性watcher"]
         //  计算属性watcher 会存储
 
         //  通过watcher找到对应所有的dep 让所有的dep 都记住这个渲染watcher
-        let i = this.deps.length;
+        let i = this.deps.length; // firstName lastName
         while (i--) {
-            this.deps[i].depend(); // 让dep去存储渲染watcher
+            this.deps[i].depend(); // 让dep去 存储渲染watcher
         }
     }
 }

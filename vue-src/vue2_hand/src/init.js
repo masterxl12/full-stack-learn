@@ -44,13 +44,14 @@ export function initMixin(Vue) {
                 template = el.outerHTML;
             }
             // 编译原理  将模板编译成render函数
-            const render = compileToFunctions(template);
+            const render = compileToFunctions(template); //  模板编译
             options.render = render;
         }
         // 渲染时调用的都是这个render方法
         // 1. 有render方法
 
-        // 需要挂载组件
+        // 需要挂载组件 
+        // 根据render方法产生虚拟节点 ，再将虚拟节点变成真实节点 插入到页面中
         mountComponent(vm, el);
         // console.log(options.render);
     }

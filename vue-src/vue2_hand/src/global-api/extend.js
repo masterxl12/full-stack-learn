@@ -1,4 +1,4 @@
-import {mergeOptions} from '../util'
+import { mergeOptions } from '../util'
 
 export default function initExtend(Vue) {
     let cid = 0;
@@ -7,7 +7,7 @@ export default function initExtend(Vue) {
         //  如果对象相同 应该复用构造函数
         const Super = this;
         const Sub = function VueComponent(options) {
-            this._init(options);
+            Super._init(options);
         };
         Sub.cid = cid++;
         Sub.prototype = Object.create(Super.prototype);

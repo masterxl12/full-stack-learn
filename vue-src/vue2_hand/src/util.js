@@ -95,7 +95,7 @@ let mergeOptions = function (parent, child) {
         if (strategy[key]) {
             options[key] = strategy[key](parent[key], child[key])
         } else {
-            // 默认合并
+            // 默认合并 原则 -> 先用儿子的 再用父亲的
             if (child[key]) {
                 options[key] = child[key];
             } else {

@@ -11,17 +11,20 @@ export function patch(oldVnode, vnode) {
         return createEle(vnode);
     }
 
-    // 默认初始化时  是直接用虚拟节点创建出真实节点来 替换掉老节点
+    // 1. 默认初始化时  
+    // 1.1 渲染阶段 是直接用虚拟节点创建出真实节点来 替换掉老节点
     if (oldVnode.nodeType === 1) { // 渲染功能
         // console.log(oldVnode, vnode);
         // console.log(oldVnode.parentNode);
         // console.log(oldVnode.nextSibling);
         let el = createEle(vnode); // 产生真实的dom
         let parentElm = oldVnode.parentNode; // 获取老的app父亲 -> body
-        parentElm.insertBefore(el, oldVnode.nextSibling); // 当前的真实元素 插入到app的后面
+        // 当前的真实元素 插入到app的后面
+        parentElm.insertBefore(el, oldVnode.nextSibling);
         parentElm.removeChild(oldVnode); // 删除老的节点
         return el;
-    } else { // 更新功能
+    } else {
+        // 1.2 更新功能
         // 在更新时 用老的虚拟节点 和 新的虚拟节点做对比  将不同的地方更新为真实dom
         // console.log(oldVnode, vnode, oldVnode.el);
         // 1. 比较两个元素的标签 标签不一样直接替换掉即可
@@ -56,7 +59,7 @@ export function patch(oldVnode, vnode) {
         } else if (oldVnodeChildren.length > 0) { //  老的有儿子 新的没儿子
             el.innerHTML = '';
         } else if (newVnodeChildren.length > 0) {//  老的没儿子 新的有儿子
-            for (let i = 0; i < vNodeLen; i++) {
+            for (let i = 0; i < vnode.length; i++) {
                 let childNode = vnode.children[i];
                 el.appendChild(createEle(childNode));
             }
@@ -78,7 +81,7 @@ function createComponent(vnode) {
 }
 
 export function createEle(vnode) {
-    let {tag, data, children, text, key} = vnode;
+    let { tag, data, children, text, key } = vnode;
     if (typeof tag === 'string') { // 创建元素 放到vnode.el 上
 
         if (createComponent(vnode)) { // 组件渲染后的结果 放到当前组件的实例上
@@ -153,16 +156,16 @@ function updateChildren(oldChildren, newChildren, parent) { // 双指针
     let newEndIndex = newChildren.length - 1;// 老的结束索引
     let newEndVnode = newChildren[newEndIndex]; // 老的结束索引指向的节点
 
-//    vue中diff算法做了很多优化
+    //    vue中diff算法做了很多优化
 
-//    DOM中操作有很多常见的逻辑 把节点插入到当前儿子的头部、尾部、儿子倒序正序
+    //    DOM中操作有很多常见的逻辑 把节点插入到当前儿子的头部、尾部、儿子倒序正序
 
-//    vue2中采用的是双指针的方式
+    //    vue2中采用的是双指针的方式
 
-//    在尾部添加
+    //    在尾部添加
 
-//    做一个循环 同时循环老的和新的  哪个先结束 循环就停止 将多余的删除或者添加进去
-//    比较谁先循环停止
+    //    做一个循环 同时循环老的和新的  哪个先结束 循环就停止 将多余的删除或者添加进去
+    //    比较谁先循环停止
 
     function makeIndexByKey(children) {
         let map = {};

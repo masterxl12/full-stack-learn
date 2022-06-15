@@ -87,6 +87,7 @@ function defineComputed(target, key, userDef) {
     Object.defineProperty(target, key, sharedPropertyDefinition)
 }
 
+// ['渲染watcher','计算属性watcher']
 function createComputedGetter(key) {
     return function () { // 每次取值会调用此方法
         const watcher = this._computedWatchers[key];
@@ -96,8 +97,11 @@ function createComputedGetter(key) {
             // 如果有修改 再次走这里取值watcher.dirty=true
             if (watcher.dirty) {
                 watcher.evaluate(); // 对当前watcher求值
+                // 执行完之后 计算属性watcher出栈 
             }
-            if (Dep.target) {
+            if (Dep.target) { // Dep.target = '渲染watcher'
+                // 此时的watcher -> '计算属性watcher'
+                // 然后让计算属性 依赖的firstName lastName再去收集添加渲染watcher
                 watcher.depend();
             }
             return watcher.value; // 默认返回watcher上存的值
@@ -131,7 +135,7 @@ function createWatcher(vm, expOrFn, handler, options) { // options 可以用来�
                         console.log(newVal, oldVal);
                     },
                     immediate: true
-                }
+            }
         */
         options = handler;
         handler = handler.handler; // 是一个函数

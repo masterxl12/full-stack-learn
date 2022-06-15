@@ -1,11 +1,16 @@
 import { isReservedTag } from '../util'
 
 export function renderMixin(Vue) {
+    /**
+     * 调用编译后的render方法，生成虚拟节点
+     * @returns 
+     */
     Vue.prototype._render = function () {
         const vm = this;
         const render = vm.$options.render;
         // _c('div',{id:"app",style:{"color":"red"}},_c('div',undefined,_v("hello"+_s(version)+"world"+_s(arr)),_c('span',undefined,_v("world"))))
         // console.log(render);
+        // 调用render方法，会进行取值操作 触发get方法（依赖收集）
         let vnode = render.call(vm);
         // console.log("vnode: ",vnode);
         /*
@@ -18,7 +23,8 @@ export function renderMixin(Vue) {
         return vnode;
     };
 
-    Vue.prototype._c = function () { // 创建虚拟dom元素
+    // 创建虚拟dom元素
+    Vue.prototype._c = function () {
         // console.log(arguments);
         return createElement(this, ...arguments);
     };
@@ -28,7 +34,8 @@ export function renderMixin(Vue) {
         return val == null ? '' : (typeof val === 'object') ? JSON.stringify(val) : val;
     };
 
-    Vue.prototype._v = function (text) { // 创建虚拟dom文本
+    // 创建虚拟dom文本节点
+    Vue.prototype._v = function (text) {
         // console.log(text);
         return createTextNode(text);
     };

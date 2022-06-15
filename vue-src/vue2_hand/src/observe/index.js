@@ -45,6 +45,18 @@ class Observer {
     }
 }
 
+// 数组的依赖收集是靠数组本身，如果数组中包含着对象，也要让数组中的对象依赖收集
+// 对象的依赖收集直接让属性依赖收集即可
+
+function dependArray(value) {
+    value.forEach(item => {
+        item.__ob__ && item.__ob__.dep.depend();
+        if (Array.isArray(item)) {
+            dependArray(item)
+        }
+    })
+}
+
 /**
  * 定义响应式
  * @param {*} data 
@@ -63,7 +75,11 @@ function defineReactive(data, key, value) {
             if (Dep.target) { // 让这个属性记住watcher
                 dep.depend(); // 依赖收集
                 if (childDep) {
+                    // 让数组和对象本身进行依赖收集
                     childDep.dep.depend();
+                    // 对数组里面的数组或者对象也需要依赖收集
+                    // 如果是对象 模板编译compiler 使用JSON.stringify()方法 默认对属性依赖收集
+                    Array.isArray(value) && dependArray(value)
                 }
                 // console.log(dep.subs);
             }
