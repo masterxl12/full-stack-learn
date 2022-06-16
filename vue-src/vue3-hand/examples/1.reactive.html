@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>1.reactivity</title>
+</head>
+<body>
+    <script src="../node_modules/@vue/reactivity/dist/reactivity.global.js"></script>
+
+    <script>
+        const {reactive} = VueReactivity
+        const proxy = reactive({name:'wsn',info:{major:'web'}})
+        console.log(proxy.name);
+        console.log(proxy.info.major);
+        proxy.name = "xl"
+    </script>
+</body>
+</html>
