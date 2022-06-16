@@ -14,6 +14,11 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      type: 1,
+    };
+  },
   methods: {
     inputChange() {
       this.$emit("input", { name: "haha", age: 30 });

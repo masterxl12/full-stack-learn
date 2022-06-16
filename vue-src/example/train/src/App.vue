@@ -31,6 +31,9 @@ export default {
     },
     changeASync() {
       this.$store.dispatch("changeAgeAsync", 100);
+      // .then((res) => {
+      //   console.log(res, "res...");
+      // });
     },
   },
   mounted() {
