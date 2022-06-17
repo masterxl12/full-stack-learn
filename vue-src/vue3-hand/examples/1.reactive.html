@@ -9,24 +9,34 @@
     <script src="../node_modules/@vue/reactivity/dist/reactivity.global.js"></script>
 
     <script>
-        const {reactive,effect,toRef,ref,toRefs} = VueReactivity
+        const {reactive,effect,toRef,ref,toRefs,computed} = VueReactivity
         const proxy = reactive({name:'wsn',info:{major:'web'},age:18})
         const proxy1 = reactive([1,2,3])
 
         // const ref1 = ref({a:1})
         // const ref2 = ref(false)
 
-        const nameRef = toRef(proxy,"name")
-        effect(()=>{
-            console.log(nameRef.value);
+        let newAge = computed(()=>{
+            console.log("oh...");
+            return proxy.age * 2
         })
 
-        let [a,b,c] = toRefs(proxy1)
-        console.log(a,b,c,"****");
+        effect(()=>{
+            console.log(newAge.value,"25****");
+        })
 
-        setTimeout(()=>{
-            nameRef.value = 'xl'
-        },1000)
+        proxy.age = 100;
+        // const nameRef = toRef(proxy,"name")
+        // effect(()=>{
+        //     console.log(nameRef.value);
+        // })
+
+        // let [a,b,c] = toRefs(proxy1)
+        // console.log(a,b,c,"****");
+
+        // setTimeout(()=>{
+        //     nameRef.value = 'xl'
+        // },1000)
 
         // proxy1[3] = 100
         // proxy1.push(4)

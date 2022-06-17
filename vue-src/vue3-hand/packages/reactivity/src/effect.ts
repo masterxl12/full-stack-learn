@@ -66,7 +66,7 @@ export function track(target: any, type: string, key: any) {
     }
 }
 
-export function trigger(target: any, type: string, key: any, newValue: any, oldValue?: any) {
+export function trigger(target: any, type: string, key: any, newValue?: any, oldValue?: any) {
     const depsMap = targetMap.get(target);
     if (!depsMap) return;
     const effectsSet = new Set();
@@ -95,5 +95,11 @@ export function trigger(target: any, type: string, key: any, newValue: any, oldV
         }
     }
 
-    effectsSet.forEach((effect: any) => effect()); // 执行effect
+    effectsSet.forEach((effect: any) => {
+        if (effect.options.scheduler) {
+            effect.options.scheduler(effect);
+        } else {
+            effect()
+        }
+    }); // 执行effect
 }
