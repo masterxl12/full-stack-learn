@@ -1,4 +1,5 @@
-import { isObject } from "@vue/shared";
+import { hasOwn, isIntegerKey, isObject } from "@vue/shared";
+import { track, trigger } from "./effect";
 import { reactive, readonly } from "./reactive";
 
 /**
@@ -13,9 +14,8 @@ function createGetter(isReadonly = false, shallow = false) {
      */
     return function get(target: any, key: string, receiver: any) {
         const res = Reflect.get(target, key, receiver)
-        console.log("get...");
         if (!isReadonly) {
-            console.log("需要更新视图");
+            track(target, "get", key);
         }
         if (shallow) {
             return res
@@ -23,13 +23,21 @@ function createGetter(isReadonly = false, shallow = false) {
         if (isObject(res)) {  // 取值时递归代理
             return isReadonly ? readonly(res) : reactive(res)
         }
+
         return res;
     };
 }
 
 function createSetter(shallow = false) {
     return function set(target: any, key: string, value: any, receiver: any) {
+        const oldValue = target[key];
+        let hasKey = Array.isArray(target) && isIntegerKey(key) ? Number(key) < target.length : hasOwn(target, key);
         const res = Reflect.set(target, key, value, receiver)
+        if (!hasKey) {
+            trigger(target, "add", key, value);
+        } else if (oldValue !== value) {
+            trigger(target, "set", key, value, oldValue);
+        }
         return res;
     };
 }
