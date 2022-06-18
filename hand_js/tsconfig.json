@@ -1,0 +1,30 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "module": "commonjs",
+        // "typeRoots" : ["./typings", "./node_modules/@types"],
+        "target": "es5",
+        // "types" : [ "core-js" ],
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "allowJs": true,
+        "noEmit": true,
+        "alwaysStrict": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "outDir": "dist",
+        "moduleResolution": "Node",
+        "declaration": true,
+        "lib": [
+            "es6"
+        ]
+    },
+    "include": [
+        "index.ts",
+        "lib/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}
