@@ -20,7 +20,7 @@
         ]
     },
     "include": [
-        "index.ts",
+        "src/*",
         "lib/**/*.ts"
     ],
     "exclude": [
