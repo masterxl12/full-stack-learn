@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
-import TodoList from './components/TodoList'
-import DomIndex from './components/Dom/index'
+import { Bottom2Update } from './components/Dom/BottomToUpdate'
+import { ImgLazyLoad } from './components/Dom/ImgLazyLoad'
+import { LeftSideBar } from './config/LeftSideBar'
+// import TodoList from './components/TodoList'
+// import DomIndex from './components/Dom/index'
 // import style from './assets/style.module.css'
 
 const Text = () => {
@@ -22,11 +25,18 @@ const Text = () => {
   )
 }
 
+interface IProps {
+  children: React.ReactNode
+}
+
 ReactDOM.render(
   <React.StrictMode>
     <App>
+      <LeftSideBardeBar />
       {/* <Text /> */}
-      <DomIndex />
+      {/* <Bottom2Update />
+
+      <ImgLazyLoad /> */}
     </App>
   </React.StrictMode>,
   document.getElementById('root'),

@@ -12,7 +12,7 @@ import { ELEMENT_TEXT, TAG_ROOT, PLACEMENT, TAG_HOST, TAG_TEXT, UPDATE, DELETION
 
 let nextUnitOfWork = null // 下一个工作单元
 let workInProgressRoot = null //  正在渲染的根Fiber
-let currentRoot = null // 渲染成功之后当期根 rootFiber
+let currentRoot = null // 渲染成功之后当前根 rootFiber
 let deletions = [] // 删除的节点 并不放在effect list中 因此需要单独记录并执行
 
 export function scheduleRoot(rootFiber) {
@@ -34,18 +34,18 @@ export function scheduleRoot(rootFiber) {
   nextUnitOfWork = workInProgressRoot
 }
 
-function performUnitOfWork(currentFiber) {
-  beginWork(currentFiber) // 开
-  if (currentFiber.child) {
-    return currentFiber.child
+function performUnitOfWork(workInProgress) {
+  beginWork(workInProgress) // 开启执行工作
+  if (workInProgress.child) {
+    return workInProgress.child
   }
-  while (currentFiber) {
-    completeUnitOfWork(currentFiber) // 所有的儿子遍历完成 则自己完成
-    if (currentFiber.sibling) {
+  while (workInProgress) {
+    completeUnitOfWork(workInProgress) // 所有的儿子遍历完成 则自己完成
+    if (workInProgress.sibling) {
       // 如果有弟弟 返回弟弟
-      return currentFiber.sibling
+      return workInProgress.sibling
     }
-    currentFiber = currentFiber.return // 找父亲然后让父亲完成
+    workInProgress = workInProgress.return // 找父亲然后让父亲完成
   }
 }
 
@@ -59,7 +59,7 @@ function completeUnitOfWork(currentFiber) {
   console.log('收集副作用：', currentFiber.tag, currentFiber.stateNode)
   let returnFiber = currentFiber.return
   if (returnFiber) {
-    // 把自己儿子的effect挂载父亲身上
+    // 1. 将自己儿子的effect挂载父亲身上
     if (!returnFiber.firstEffect) {
       returnFiber.firstEffect = currentFiber.firstEffect
     }
@@ -70,7 +70,7 @@ function completeUnitOfWork(currentFiber) {
       returnFiber.lastEffect = currentFiber.lastEffect
     }
     // ----------------------------------------------------------------
-    // 把自己挂到父亲节点上
+    // 2. 将自己挂到父亲节点上
     const effectTag = currentFiber.effectTag
     if (effectTag) {
       if (returnFiber.lastEffect) {

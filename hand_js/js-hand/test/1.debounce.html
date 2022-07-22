@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1-debounce</title>
+    <style>
+        #content{
+            height:150px;
+            line-height:150px;
+            text-align:center; 
+            color: #fff;
+            background-color:#ccc;
+            font-size:80px; 
+        }
+    </style>
+</head>
+
+<body>
+    <div id="content"></div>
+    <script type="module" defer>
+        import {debounce,throttle} from './16.throttle.js'
+
+        let num = 1;
+        let content = document.getElementById("content");
+
+        const count = (e,count) => {
+            console.log("🚀 ~ file: 1.debounce.html ~ line 34 ~ e", e, count)
+            content.innerHTML = num++;
+        }
+            
+        let testParam = debounce(count,1000)
+
+        content.onmousemove =  (e) => {
+            testParam(e,1000)
+        }
+    </script>
+</body>
+</html>

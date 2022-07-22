@@ -13,6 +13,19 @@ function reducer(oldState, action) {
   }
 }
 
+let hookStates = [];
+let hookIndex = 0;
+function _useReducer(reducer, initialState) {
+  hookStates[hookIndex] = hookStates[hookIndex] || (typeof initialState === 'function' ? initialState() : initialState)
+  const dispatch = (action) => {
+    hookStates[hookIndex] = reducer ? reducer(hookStates[hookIndex], action) : action
+    // scheduleUpdate()
+  }
+
+  return [hookStates[hookIndex++], dispatch]
+}
+
+
 let lastState
 function fakeUseReducer(reducer, initialState) {
   lastState = lastState || initialState;

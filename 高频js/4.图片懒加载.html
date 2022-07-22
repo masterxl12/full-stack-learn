@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>4-图片懒加载</title>
+    <style>
+      .wrapper {
+        width: 700px;
+        height: 420px;
+        background-color: #ccc;
+        margin: 20px auto;
+        text-align: center;
+        overflow-y: scroll;
+      }
+      .wrapper > img {
+        width: 600px;
+        height: 400px;
+        margin: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <img src="./imgs/loading1.gif" data-src="./imgs/1.jpeg" alt="" />
+      <img src="./imgs/loading1.gif" data-src="./imgs/2.jpeg" alt="" />
+      <img src="./imgs/loading1.gif" data-src="./imgs/3.jpeg" alt="" />
+      <img src="./imgs/loading1.gif" data-src="./imgs/4.jpeg" alt="" />
+    </div>
+
+    <script>
+      const container = document.querySelector(".wrapper");
+      const imgList = document.querySelectorAll("img");
+      /*
+      // 使用原始方法
+      let viewHeight = container.clientHeight;
+
+      const lazyLoad = () => {
+        imgList.forEach((imgItem) => {
+          if (!imgItem.dataset.src) return;
+          let { bottom, top } = imgItem.getBoundingClientRect();
+          if (bottom >= 0 && top + 300 < viewHeight) {
+            console.log(imgItem);
+            imgItem.src = imgItem.dataset.src;
+            imgItem.removeAttribute("data-src");
+          }
+        });
+      };
+
+      let throttle = (fn, delay) => {
+        let flag = false;
+        return (...rest) => {
+          if (flag) return;
+          flag = true;
+          setTimeout(() => {
+            fn(...rest);
+            flag = false;
+          }, delay);
+        };
+      };
+
+      container.addEventListener("scroll", throttle(lazyLoad, 200));
+    */
+
+      //   使用IntersectionObserver
+
+      let observer = new IntersectionObserver(
+        (entries, self) => {
+          entries.forEach((entry) => {
+            console.log(entry);
+            if (entry.isIntersecting) {
+              let { target } = entry;
+              let src = target.dataset.src;
+              if (src) {
+                target.src = src;
+                target.removeAttribute("data-src");
+              }
+              // 解除观察
+              self.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          rootMargin: "0px",
+          threshold: 0,
+        }
+      );
+
+      [...imgList].forEach((imgItem) => {
+        observer.observe(imgItem);
+      });
+    </script>
+  </body>
+</html>

@@ -31,4 +31,10 @@ function loader(source) {
     return source
 }
 
+let str = "AAA750pxBBB760px";
+let s = str.replace(/(\d+)px/g, (_, $1, $2) => {
+    return parseFloat($1) / 10 + 'rem'
+})
+console.log(s);
+
 module.exports = loader

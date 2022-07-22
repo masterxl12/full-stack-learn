@@ -8,8 +8,14 @@
     "dev": "webpack-dev-server"
   },
   "dependencies": {
+    "@babel/preset-react": "^7.18.6",
+    "amfe-flexible": "^2.2.1",
+    "antd": "^4.21.6",
     "babel-loader": "^8.2.5",
-    "loader-utils": "^2.0.3",
+    "css": "^3.0.0",
+    "loader-utils": "^2.0.2",
+    "react": "^17.0.2",
+    "react-dom": "17.0.2",
     "webpack": "^5.73.0",
     "webpack-cli": "^4.9.2",
     "webpack-merge": "^5.8.0"

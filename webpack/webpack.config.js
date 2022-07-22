@@ -2,6 +2,8 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FileListPlugin = require('./plugins/FileListPlugin')
 const ZipPlugin = require('./plugins/ZipPlugin')
+let px2remLoaderPath = path.resolve(__dirname, 'loaders/px2rem-loader.js')
+let px2vwLoaderPath = path.resolve(__dirname, 'loaders/px2vw-loader.js')
 
 const webpackConfig = {
     // 静态服务器配置
@@ -13,9 +15,7 @@ const webpackConfig = {
     },
     mode: 'development',
     // 多入口配置
-    entry: {
-        home: './src/index.js',
-    },
+    entry: './src/index.js',
     output: {
         filename: '[name].js',
         // 打包后的路径 绝对路径
@@ -24,66 +24,46 @@ const webpackConfig = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.html',
-            filename: 'home.html',
-            chunks: ['home'],
-        }),
-        new HtmlWebpackPlugin({
-            template: './src/index.html',
-            filename: 'other.html',
-            minify: {
-                removeAttributeQuotes: true,
-                // collapseWhitespace: true
-            },
-            chunks: ['other'],
-        }),
-        new FileListPlugin({
-            filename: 'fileList.md'
-        }),
-        new ZipPlugin({
-            filename: 'asset.zip'
         })
     ],
-    // 监控文件变化 并实时打包
-    watch: true,
-    watchOptions: {
-        // 监控的选项
-        poll: 1000,
-        aggregateTimeout: 500, // 防抖 一直输入
-        ignored: /node_modules/, // 忽略监控的文件
-    },
-    devtool: 'source-map',
     module: {
         rules: [
             {
-                test: /\.(jpg|png|jpeg)$/,
+                test: /\.js$/,
+                exclude: /node_modules/,
                 use: [
-                    // "file-loader",
                     {
-                        loader: 'url-loader',
+                        loader: 'babel-loader',
                         options: {
-                            limit: 800 * 1024,
+                            presets: [
+                                "@babel/preset-env",
+                                "@babel/preset-react"
+                            ]
                         }
                     }
                 ]
             },
             {
-                test: /\.js$/,
-                use:
-                {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/preset-env']
+                test: /\.css$/,
+                use: [
+                    "style-loader",
+                    'css-loader',
+                    {
+                        // loader: px2remLoaderPath,
+                        loader: px2vwLoaderPath,
+                        options: {
+                            remUnit: 75,
+                            remPrecision: 8,
+                            exclude: /antd\.css/
+                        }
                     }
-                }
-            },
-            {
-                test: /\.(less|css|sass)$/,
-                use: ["style-loader", 'css-loader', 'less-loader']
+                ]
             }
         ]
     },
     resolveLoader: {
-        modules: [path.resolve(__dirname, 'loaders')]
+        // modules: [path.resolve(__dirname, 'loaders'), "node_modules"]
+        // modules: [path.resolve(__dirname, 'loaders')]
     },
     resolve: {
         modules: [path.resolve(__dirname, 'node_modules')],

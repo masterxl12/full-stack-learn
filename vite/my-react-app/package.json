@@ -1,6 +1,8 @@
 {
   "name": "my-react-app",
   "version": "0.0.0",
+  "license": "MIT",
+  "type": "module",
   "scripts": {
     "start": "yarn && react-scripts start",
     "dev": "vite",
@@ -10,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "antd": "^4.21.7",
     "express": "^4.17.2",
     "less": "^4.1.2",
     "less-loader": "^10.2.0",
@@ -17,6 +20,8 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
+    "react-router": "^5.2.1",
+    "react-router-dom": "^5.3.0",
     "react-scripts": "^5.0.0"
   },
   "devDependencies": {

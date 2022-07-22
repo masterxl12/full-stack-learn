@@ -4,7 +4,7 @@ function checkType(type) {
     return function (obj) {
         return Object.prototype.toString.call(obj) === '[object ' + type + ']'
     }
- }
+}
 
 let isString = checkType('String');
 let isArray = checkType('Array');
@@ -15,16 +15,16 @@ let isBoolean = checkType('Boolean');
 let flag1 = isString('aaa')
 console.log(flag1);
 
-function add(a, b, c, d, e) { 
-    return a + b + c + d + e;
+function add(a, b, c) {
+    return a + b + c
 }
 
-function curry(fn) { 
+function curry(fn) {
     let len = fn.length;
     let _args = [...arguments].slice(1);
-    return (...args) => { 
+    return (...args) => {
         args = _args ? [..._args, ...args] : args;
-        if (args.length < len) { 
+        if (args.length < len) {
             return curry(fn, ...args);
         }
         return fn(...args);
@@ -32,7 +32,7 @@ function curry(fn) {
 }
 
 // @ts-ignore
-console.log(curry(add,1,2)(3)(4,5));
-console.log(curry(add)(1,2)(3)(4,5));
-console.log(curry(add)(1)(2)(3)(4,5));
+console.log(curry(add, 1, 2)(3)(4, 5));
+console.log(curry(add)(1, 2)(3)(4, 5));
+console.log(curry(add)(1)(2)(3)(4, 5));
 console.log(curry(add)(1)(2)(3)(4)(5));
