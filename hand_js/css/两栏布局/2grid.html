@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>两栏自适应布局</title>
+    <style>
+      .wrapper {
+        background-color: #eee;
+        display: grid;
+        grid-template-rows: 800px;
+        grid-template-columns: 200px auto;
+      }
+      .left {
+        background: orange;
+      }
+      .right {
+        background: purple;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="left"></div>
+      <div class="right"></div>
+    </div>
+  </body>
+</html>

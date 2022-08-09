@@ -32,7 +32,7 @@ interface IProps {
 ReactDOM.render(
   <React.StrictMode>
     <App>
-      <LeftSideBardeBar />
+      {/* <LeftSideBardeBar /> */}
       {/* <Text /> */}
       {/* <Bottom2Update />
 

@@ -35,7 +35,7 @@ function createRef() {
   }
 }
 
-function forwordRef(FunctionComponent) {
+function forwardRef(FunctionComponent) {
   return class extends Component {
     render() {
       return FunctionComponent(this.props, this.props.ref)
@@ -64,6 +64,6 @@ export default {
   createElement,
   Component,
   createRef,
-  forwordRef,
+  forwardRef,
   createContext
 }

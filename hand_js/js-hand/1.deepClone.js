@@ -28,9 +28,6 @@ let obj = {
     }
 };
 
-let res = deepClone(obj)
-console.log(res === obj, res);
-
 // 2. 循环引用的问题，引起内存泄漏
 /**
  循环引用问题 obj.o = obj;

@@ -8,20 +8,20 @@ export default ({ mode }) => {
 
   return defineConfig({
     plugins: [react()],
-    resolve: {
-      alias: {
-        '@': path.resolve(__dirname, 'src'),
-      },
-    },
-    server: {
-      port: 8000,
-      proxy: {
-        '/api': {
-          target: 'http://jsonplaceholder.typicode.com',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ''),
-        },
-      },
-    },
+    // resolve: {
+    //   alias: {
+    //     '@': path.resolve(__dirname, 'src'),
+    //   },
+    // },
+    // server: {
+    //   port: 8000,
+    //   proxy: {
+    //     '/api': {
+    //       target: 'http://jsonplaceholder.typicode.com',
+    //       changeOrigin: true,
+    //       rewrite: (path) => path.replace(/^\/api/, ''),
+    //     },
+    //   },
+    // },
   })
 }

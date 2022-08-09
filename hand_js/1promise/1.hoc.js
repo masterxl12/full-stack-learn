@@ -1,3 +1,25 @@
+const spawn = require("child_process").spawn
+
+function startServer() {
+    let server = spawn('node', ['app.js'], {
+        detached: true
+    })
+
+    server.on('close', (code, signal) => {
+        server.kill(signal)
+        server = startServer()
+    })
+
+    server.on('error', (code, signal) => {
+        server.kill(signal)
+        server = startServer()
+    })
+
+    return server
+}
+
+
+
 const say = (...args) => {
     console.log(args, "say");
 };
@@ -16,4 +38,4 @@ let newSay = say.before(() => {
     console.log("before say");
 });
 
-newSay('a','b','c')
+newSay('a', 'b', 'c')
